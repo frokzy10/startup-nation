@@ -15,7 +15,8 @@ const StartPage = () => {
             <BackWidget/>
             <Typography variant="h5">Выберите страну проживания</Typography>
             <CountryChoose option={option} setOption={setOption}/>
-            <ChooseCity/>
+            <Typography variant="h5">Выберите город проживания</Typography>
+            <ChooseCity option={option} setOption={setOption}/>
         </Container>
     )
 }
