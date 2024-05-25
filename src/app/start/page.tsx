@@ -31,7 +31,7 @@ const StartPage = () => {
         }
     }
     return (
-        <Container sx={{marginTop: "20px"}}>
+        <Container sx={{height:'80vh',marginTop: "20px"}}>
             <BackWidget/>
             <Typography variant="h5">Выберите страну проживания</Typography>
             <CountryChoose country={country} setCountry={setCountry}/>

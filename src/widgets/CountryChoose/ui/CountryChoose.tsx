@@ -48,7 +48,7 @@ const CountryChoose: React.FC<ICountryChoose> = ({ country, setCountry }) => {
             >
                 <option value=""></option>
                 {countries.map((c) => (
-                    <option key={c._id} value={c.country}>
+                    <option key={c._id.toString()} value={c.country}>
                         {c.country}
                     </option>
                 ))}

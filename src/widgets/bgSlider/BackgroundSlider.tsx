@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
+import { Box, Button, Typography } from '@mui/material';
+import Link from "next/link";
+import {useSelector} from "react-redux";
+import {isAuthSelectors} from "@/entities/isAuth";
+import {Overlay, BackgroundContainer,ContentContainer} from "../bgSlider/BackgroundSlider.styles";
 
 interface BackgroundSliderProps {
     images: string[];
     duration?: number; // Duration in seconds
 }
 
-const BackgroundContainer = styled('div')<{ backgroundImage: string }>(({ backgroundImage }) => ({
-    width: '100%',
-    height: '100vh',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundImage: `url(${backgroundImage})`,
-    transition: 'background-image 1s ease-in-out',
-}));
-
 const BackgroundSlider: React.FC<BackgroundSliderProps> = ({ images, duration = 5 }) => {
+    const isAuth = useSelector(isAuthSelectors.getIsAuth);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
@@ -27,7 +24,27 @@ const BackgroundSlider: React.FC<BackgroundSliderProps> = ({ images, duration = 
     }, [images, duration]);
 
     return (
-        <BackgroundContainer backgroundImage={images[currentImageIndex]} />
+        <BackgroundContainer backgroundImage={images[currentImageIndex]}>
+            <Overlay />
+            <ContentContainer>
+                <Typography sx={{textAlign: "center", fontSize: "2.5rem"}} variant="h2">
+                    Добро пожаловать в перенаправление!
+                </Typography>
+                {!isAuth ? (
+                    <Link href="/start">
+                        <Button variant="contained" sx={{display: "flex", m: "15px auto"}}>
+                            Перейти
+                        </Button>
+                    </Link>
+                ) : (
+                    <Link href="/start/:name">
+                        <Button variant="contained" sx={{display: "flex", m: "15px auto"}}>
+                            Перейти
+                        </Button>
+                    </Link>
+                )}
+            </ContentContainer>
+        </BackgroundContainer>
     );
 };
 

@@ -3,6 +3,7 @@ import {Inter} from "next/font/google";
 import "./globals.scss";
 import Header from "@/widgets/header/ui/Header";
 import StoreProvider from "@/app/_providers/store/ui/StoreProvider";
+import Footer from "@/widgets/footer/Footer";
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-    children,}: Readonly<{
+                                       children,}: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
@@ -22,8 +23,9 @@ export default function RootLayout({
         <StoreProvider>
             <Header/>
             {children}
+            <Footer/>
         </StoreProvider>
         </body>
         </html>
     );
-}
+};
