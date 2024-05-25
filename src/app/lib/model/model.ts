@@ -1,27 +1,23 @@
 import mongoose from "mongoose";
-import {IAttraction, ICafe, ICity, ICountry, IEntertainment, IHotel, Image} from "@/app/lib/model/model.type";
+import {IAttraction, ICafe, ICity, ICountry, IEntertainment, IHotel, IImage} from "@/app/lib/model/model.type";
+import {number} from "prop-types";
 
 const Schema = mongoose.Schema;
 
-const CitySchema = new Schema<ICity>({
-    name: { type: String, required: true },
-    population: Number,
-    description: String,
-});
-
 const HotelSchema = new Schema<IHotel>({
-    name: { type: String, required: true },
+    name: {type: String, required: true},
     address: String,
     street: String,
     rating: Number,
     social: String,
     description: String,
     image: String,
+    costAnHour: number,
     time: String,
 });
 
 const CafeSchema = new Schema<ICafe>({
-    name: { type: String, required: true },
+    name: {type: String, required: true},
     rating: String,
     street: String,
     description: String,
@@ -32,7 +28,7 @@ const CafeSchema = new Schema<ICafe>({
 });
 
 const AttractionSchema = new Schema<IAttraction>({
-    name: { type: String, required: true },
+    name: {type: String, required: true},
     description: String,
     image: String,
     history: String,
@@ -42,26 +38,37 @@ const AttractionSchema = new Schema<IAttraction>({
 });
 
 const EntertainmentSchema = new Schema<IEntertainment>({
-    name: { type: String, required: true },
+    name: {type: String, required: true},
     floors: Number,
     street: String,
     image: String,
     time: String,
+    description: String,
 });
 
-const ImageSchema = new Schema<Image>({
-    url: { type: String, required: true },
+const ImageSchema = new Schema<IImage>({
+    url: {type: String, required: true},
+});
+
+const CitySchema = new Schema<ICity>({
+    name: {type: String, required: true},
+    population: {type: Number, required: true},
+    description: {type: String, required: true},
+    hotels: {
+        type: Map,
+        of: HotelSchema,
+    },
+    cafes: [CafeSchema],
+    attractions: [AttractionSchema],
+    entertainments: [EntertainmentSchema],
 });
 
 const CountrySchema = new mongoose.Schema<ICountry>({
-    country: { type: String, required: true },
+    _id: {type: mongoose.Schema.Types.ObjectId, default: new mongoose.Types.ObjectId()},
+    country: {type: String, required: true},
+    description: {type: String, required: true},
     cities: [CitySchema],
-    hotels: [HotelSchema],
-    cafe: [CafeSchema],
-    attractions: [AttractionSchema],
-    entertainment: [EntertainmentSchema],
     images: [ImageSchema],
-    description: { type: String, required: true },
 });
 const Country = mongoose.models.Country || mongoose.model<ICountry>("Country", CountrySchema);
 export default Country;

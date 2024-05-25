@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { FormControl, InputLabel, NativeSelect } from "@mui/material";
-import { ICountry, ICity } from "@/app/_types/types";
+import React, {useEffect, useState} from 'react';
+import {FormControl, InputLabel, NativeSelect} from "@mui/material";
+import {ICountry, ICity} from "@/app/_types/types";
+import Spinner from "@/shared/spinner/ui/Spinner";
 
 interface ICityChoose {
-    option: string,
-    setOption: React.Dispatch<React.SetStateAction<string>>
+    city: string,
+    setCity: React.Dispatch<React.SetStateAction<string>>
 }
 
-const ChooseCity: React.FC<ICityChoose> = ({ option, setOption }) => {
+const ChooseCity = (props: ICityChoose) => {
+    const {city, setCity} = props;
     const [countries, setCountries] = useState<ICountry[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -19,20 +21,19 @@ const ChooseCity: React.FC<ICityChoose> = ({ option, setOption }) => {
                 if (!res.ok) {
                     throw new Error("Failed to fetch data");
                 }
+                setIsLoading(true)
                 const data = await res.json();
                 setCountries(data);
-            } catch (err:any) {
+            } catch (err: any) {
                 setError(err.message);
             } finally {
-                setLoading(false);
+                setIsLoading(false);
             }
         };
         fetchCountries();
     }, []);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    if (isLoading) return <Spinner/>
 
     if (error) {
         return <div>Error: {error}</div>;
@@ -44,8 +45,8 @@ const ChooseCity: React.FC<ICityChoose> = ({ option, setOption }) => {
                 Город
             </InputLabel>
             <NativeSelect
-                onChange={(e) => setOption(e.target.value)}
-                value={option}
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
                 inputProps={{
                     name: 'country',
                     id: 'uncontrolled-native',
@@ -53,13 +54,11 @@ const ChooseCity: React.FC<ICityChoose> = ({ option, setOption }) => {
             >
                 <option value=""></option>
                 {countries.map((country) => (
-                    <optgroup key={country._id}>
-                        {country.cities.map((city: ICity) => (
-                            <option key={city._id} value={city.name}>
-                                {city.name}
-                            </option>
-                        ))}
-                    </optgroup>
+                    country.cities.map((city: ICity) => (
+                        <option key={city._id} value={`${city.name}`}>
+                            {city.name}
+                        </option>
+                    ))
                 ))}
             </NativeSelect>
         </FormControl>

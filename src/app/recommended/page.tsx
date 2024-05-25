@@ -1,10 +1,20 @@
+"use client"
 import React, {FC} from 'react';
 import Typography from "@mui/material/Typography";
 import {Container} from "@mui/material";
 import LeftBlock from "@/widgets/recommendedUI/LeftBlock";
 import RightBlock from "@/widgets/recommendedUI/RightBlock";
+import {useSelector} from "react-redux";
+import {isAuthSelectors} from "@/entities/isAuth";
+import {useRouter} from "next/navigation";
 
-const RecommendationPage: FC = () => {
+const RecommendationPage = () => {
+    const isAuth = useSelector(isAuthSelectors.getIsAuth);
+    const router = useRouter();
+
+    if(!isAuth){
+        return router.push("/start")
+    }
 
     return (
         <Container>
