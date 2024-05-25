@@ -20,7 +20,7 @@ export default function Home() {
                     </Button>
                 </Link>
             ):(
-                <Link href="/start">
+                <Link href="/start/:name">
                     <Button variant="contained" sx={{display: "flex", m: "15px auto"}}>
                         Перейти
                     </Button>

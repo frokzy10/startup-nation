@@ -1,6 +1,6 @@
-import mongoose, {Document} from 'mongoose';
+import mongoose from "mongoose";
 
-export interface IHotel extends Document {
+export interface IHotel {
     name: string;
     address: string;
     street: string;
@@ -12,7 +12,7 @@ export interface IHotel extends Document {
     time: string
 }
 
-export interface IAttraction extends Document {
+export interface IAttraction {
     name: string;
     description: string;
     image: string;
@@ -22,7 +22,7 @@ export interface IAttraction extends Document {
     time: string
 }
 
-export interface IEntertainment extends Document {
+export interface IEntertainment {
     name: string;
     floors: number
     street: string;
@@ -31,7 +31,7 @@ export interface IEntertainment extends Document {
     description: string;
 }
 
-export interface ICafe extends Document {
+export interface ICafe {
     name: string;
     rating: string;
     street: string;
@@ -42,23 +42,22 @@ export interface ICafe extends Document {
     time: string;
 }
 
-export interface IImage extends Document {
+export interface IImage {
     image: any[]
     url: string;
 }
 
-export interface ICity extends Document {
+export interface ICity {
     name: string;
     population: number;
     description: string;
     hotels?: IHotel[];
-
     cafes?: ICafe[];
     attractions?: IAttraction[];
     entertainments?: IEntertainment[];
 }
 
-export interface ICountry extends Document {
+export interface ICountry {
     _id: mongoose.Types.ObjectId;
     country: string;
     description: string;

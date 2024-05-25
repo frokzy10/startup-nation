@@ -1,13 +1,16 @@
 "use client"
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import {ICountry} from "@/app/_types/types";
 import CountryComponent from "@/RenderComponents/CountryComponent/CountryComponent";
+import {ICountry} from "@/RenderComponents/Types/types";
+import {Container, Divider, TextField} from "@mui/material";
+import {useSelector} from "react-redux";
+import {isAuthSelectors} from "@/entities/isAuth";
+import {redirect} from "next/navigation";
 
 export default function Page() {
-    const params = useParams();
     const [countries, setCountries] = useState<ICountry[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const isAuth = useSelector(isAuthSelectors.getIsAuth);
 
     useEffect(() => {
         const fetchCountries = async () => {
@@ -27,11 +30,15 @@ export default function Page() {
         fetchCountries();
     }, []);
 
+    if(!isAuth) return redirect("/start")
+
     return (
-        <main>
+        <Container sx={{marginTop:"15px"}}>
+            <TextField fullWidth label="Что вы хотите найти?" id="fullWidth" />
+            <Divider sx={{marginTop:"10px"}}/>
             {countries.map((country)=>(
-                <CountryComponent country={country} key={country._id}/>
+                <CountryComponent country={country} key={country._id.toString()}/>
             ))}
-        </main>
+        </Container>
     );
 }

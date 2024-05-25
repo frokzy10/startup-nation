@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import {IAttraction, ICafe, ICity, ICountry, IEntertainment, IHotel, IImage} from "@/app/lib/model/model.type";
-import {number} from "prop-types";
 
 const Schema = mongoose.Schema;
 
@@ -12,7 +11,7 @@ const HotelSchema = new Schema<IHotel>({
     social: String,
     description: String,
     image: String,
-    costAnHour: number,
+    costAnHour: Number,
     time: String,
 });
 
@@ -51,13 +50,11 @@ const ImageSchema = new Schema<IImage>({
 });
 
 const CitySchema = new Schema<ICity>({
+    _id: { type: mongoose.Schema.Types.ObjectId, default: () => new mongoose.Types.ObjectId() },
     name: {type: String, required: true},
     population: {type: Number, required: true},
     description: {type: String, required: true},
-    hotels: {
-        type: Map,
-        of: HotelSchema,
-    },
+    hotels: [HotelSchema],
     cafes: [CafeSchema],
     attractions: [AttractionSchema],
     entertainments: [EntertainmentSchema],

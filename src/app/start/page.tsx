@@ -30,7 +30,6 @@ const StartPage = () => {
             return dispatch(setIsAuth(true))
         }
     }
-
     return (
         <Container sx={{marginTop: "20px"}}>
             <BackWidget/>
