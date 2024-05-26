@@ -1,37 +1,37 @@
 import dbConnect from "@/app/lib/dbConnect";
-import { NextResponse } from "next/server";
 import Country from "@/app/lib/model/model";
+import { NextResponse } from "next/server";
+import { NextApiRequest } from "next";
 
-export async function GET(route: { params: { id: string } }) {
+export async function GET(req: NextApiRequest, route: { params: { id: string, hotelid: string } }) {
     await dbConnect();
     try {
-        const id = route.params.id;
-        if (!id) {
-            return NextResponse.json({ error: 'Отсутствует идентификатор' });
+        const { id, hotelid } = route.params;
+        console.log(id, hotelid);
+
+        if (!id || !hotelid) {
+            return NextResponse.json({ error: 'Отсутствует идентификатор города или отеля' });
         }
 
-        const country = await Country.findOne({ "cities.hotels._id": id });
+        const country = await Country.findOne({});
+        console.log(country);
 
         if (!country) {
+            return NextResponse.json({ error: 'Страна не найдена' });
+        }
+
+        const city = country.cities.find((city: any) => String(city._id) === id);
+        if (!city) {
+            return NextResponse.json({ error: 'Город не найден' });
+        }
+
+        const hotel = city.hotels.find((hotel: any) => String(hotel._id) === hotelid);
+        if (!hotel) {
             return NextResponse.json({ error: 'Отель не найден' });
         }
 
-        let hotelWithId;
-        country.cities.forEach((city: any) => {
-            if (city.hotels) {
-                const hotel = city.hotels.find((hotel: any) => String(hotel._id) === id);
-                if (hotel) {
-                    hotelWithId = hotel;
-                }
-            }
-        });
-
-        if (!hotelWithId) {
-            return NextResponse.json({ error: 'Отель не найден' });
-        }
-
-        return NextResponse.json(hotelWithId);
-    } catch (e) {
-        return NextResponse.json(e);
+        return NextResponse.json(hotel);
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message });
     }
 }

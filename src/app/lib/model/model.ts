@@ -50,7 +50,7 @@ const ImageSchema = new Schema<IImage>({
 });
 
 const CitySchema = new Schema<ICity>({
-    _id: { type: mongoose.Schema.Types.ObjectId, default: () => new mongoose.Types.ObjectId() },
+    _id: {type: mongoose.Schema.Types.ObjectId, default: () => new mongoose.Types.ObjectId()},
     name: {type: String, required: true},
     population: {type: Number, required: true},
     description: {type: String, required: true},

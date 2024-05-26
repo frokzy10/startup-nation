@@ -22,7 +22,7 @@ const StartPage = () => {
     useEffect(() => {
         const fetchCity = async () => {
             try {
-                const res = await fetch(`${$API}/api/country/66518159395abf6996ebd04e`)
+                const res = await fetch(`${$API}/api/country/${city}`)
                 setIsLoading(true)
                 const data = await res.json()
                 return data;
@@ -34,7 +34,7 @@ const StartPage = () => {
         }
         fetchCity()
     }, []);
-
+    console.log(city)
     useEffect(() => {
         const fetchCountries = async () => {
             setIsLoading(true)
