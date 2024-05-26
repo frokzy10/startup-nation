@@ -1,44 +1,115 @@
 "use client"
 import React, {useEffect, useState} from 'react'
-import {Container} from "@mui/material";
+import {Container, InputLabel, NativeSelect} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import CountryChoose from "@/widgets/CountryChoose/ui/CountryChoose";
 import BackWidget from "@/widgets/backWidget/ui/BackWidget";
-import ChooseCity from "@/widgets/ChooseCity/ui/ChooseCity";
 import {StylesButton} from "@/app/start/StartPage.styles";
 import Box from "@mui/material/Box";
+import {$API, useAppDispatch} from "@/shared";
+import {FormControl} from "@mui/material";
+import {ICity, ICountry} from "@/RenderComponents/Types/types";
 import {useRouter} from "next/navigation";
-import {useAppDispatch} from "@/shared";
-import {isAuthSelectors, setIsAuth} from "@/entities/isAuth";
-import {useSelector} from "react-redux";
-
+import {setIsAuth} from "@/entities/isAuth";
+import Spinner from "@/shared/spinner/ui/Spinner";
 
 const StartPage = () => {
-    const [country, setCountry] = useState("");
+    const dispatch = useAppDispatch()
+    const [countries, setCountries] = useState<ICountry[]>([]);
+    const [country, setCountry] = useState<string>("");
     const [city, setCity] = useState<string>("");
-    const router   = useRouter();
-    const dispatch = useAppDispatch();
-    const getIs = useSelector(isAuthSelectors.getIsAuth);
-
-    console.log(getIs)
-    const handleClick = () => {
-        if(!country || !city){
-            console.log(false)
-            return
-        }else{
-            router.push(`/start/${city}`)
-            return dispatch(setIsAuth(true))
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const router = useRouter()
+    useEffect(() => {
+        const fetchCity = async () => {
+            try {
+                const res = await fetch(`${$API}/api/country/66518159395abf6996ebd04e`)
+                setIsLoading(true)
+                const data = await res.json()
+                return data;
+            } catch (e) {
+                console.log(e)
+            } finally {
+                setIsLoading(false)
+            }
         }
+        fetchCity()
+    }, []);
+
+    useEffect(() => {
+        const fetchCountries = async () => {
+            try {
+                const res = await fetch(`${$API}/api/country`);
+                if (!res.ok) {
+                    throw new Error("Failed to fetch data");
+                }
+                setIsLoading(true)
+                const data = await res.json();
+                setCountries(data);
+            } catch (err: any) {
+                console.log(err)
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchCountries();
+    }, []);
+    console.log(city)
+    if (isLoading) return <Spinner/>;
+    const handleNavigate = () => {
+        dispatch(setIsAuth(true))
+        return router.push(`/start/${city}`)
     }
     return (
-        <Container sx={{height:'80vh',marginTop: "20px"}}>
+        <Container sx={{marginTop: "20px"}}>
             <BackWidget/>
             <Typography variant="h5">Выберите страну проживания</Typography>
-            <CountryChoose country={country} setCountry={setCountry}/>
+            <FormControl fullWidth>
+                <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                    Страна
+                </InputLabel>
+                <NativeSelect
+                    onChange={(e) => setCountry(e.target.value)}
+                    value={country}
+                    defaultValue={30}
+                    inputProps={{
+                        name: 'age',
+                        id: 'uncontrolled-native',
+                    }}
+                >
+                    <option value=""></option>
+                    {countries.map((c) => (
+                        <option key={c._id.toString()} value={c.country}>
+                            {c.country}
+                        </option>
+                    ))}
+                </NativeSelect>
+            </FormControl>
             <Typography variant="h5">Выберите город проживания</Typography>
-            <ChooseCity city={city} setCity={setCity}/>
+            <FormControl fullWidth>
+                <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                    Город
+                </InputLabel>
+                <NativeSelect
+                    disabled={!country}
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    inputProps={{
+                        name: 'country',
+                        id: 'uncontrolled-native',
+                    }}
+                >
+                    <option value=""></option>
+                    {countries.map((country) => (
+                        country.cities.map((city: ICity) => (
+                            <option key={city._id.toString()} value={`${city._id}`}>
+                                {city.name}
+                            </option>
+                        ))
+                    ))}
+                </NativeSelect>
+            </FormControl>
             <Box sx={{width: "100%", display: "flex", justifyContent: "flex-end", marginTop: "15px"}}>
-                <StylesButton onClick={handleClick} variant="contained">
+                <StylesButton onClick={handleNavigate} variant="contained" disabled={!city || !country}>
                     Перейти
                 </StylesButton>
             </Box>
