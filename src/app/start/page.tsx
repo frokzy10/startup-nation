@@ -37,12 +37,12 @@ const StartPage = () => {
 
     useEffect(() => {
         const fetchCountries = async () => {
+            setIsLoading(true)
             try {
                 const res = await fetch(`${$API}/api/country`);
                 if (!res.ok) {
                     throw new Error("Failed to fetch data");
                 }
-                setIsLoading(true)
                 const data = await res.json();
                 setCountries(data);
             } catch (err: any) {
@@ -53,12 +53,11 @@ const StartPage = () => {
         };
         fetchCountries();
     }, []);
-    console.log(city)
-    if (isLoading) return <Spinner/>;
     const handleNavigate = () => {
         dispatch(setIsAuth(true))
         return router.push(`/start/${city}`)
     }
+    if (isLoading) return <Spinner/>;
     return (
         <Container sx={{marginTop: "20px"}}>
             <BackWidget/>

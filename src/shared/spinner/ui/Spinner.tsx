@@ -17,10 +17,10 @@ const Spinner = () => {
                 bottom: 0,
                 width: "100%",
                 height: "100vh",
-                zIndex: 999,
+                zIndex: 1999,
             }}
         >
-            <CircularProgress sx={{zIndex: 1000}}/>
+            <CircularProgress sx={{zIndex: 2000}}/>
         </Box>
     );
 };

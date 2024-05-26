@@ -48,6 +48,7 @@ export interface IImage {
 }
 
 export interface ICity {
+    _id:string
     name: string;
     population: number;
     description: string;
