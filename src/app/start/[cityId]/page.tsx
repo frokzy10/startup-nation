@@ -15,7 +15,7 @@ export default function IdPage() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState("");
     const params = useParams();
-    console.log()
+
     useEffect(() => {
         const fetchCity = async () => {
             try {

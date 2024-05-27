@@ -59,4 +59,22 @@
       }
     }
   }
+  @media (max-width: 600px) {
+    .info{
+      opacity: 1;
+      transform: translateY(0px);
+      h5{
+        margin: 0;
+      }
+      p{
+        letter-spacing: 1px;
+        font-size: 15px;
+        margin-top: 8px;
+        margin-bottom: 20px;
+      }
+    }
+    &:before{
+      opacity: 1;
+    }
+  }
 }

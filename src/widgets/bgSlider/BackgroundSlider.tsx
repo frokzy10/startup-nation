@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
-import { Box, Button, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import Link from "next/link";
-import { useSelector } from "react-redux";
-import { isAuthSelectors } from "@/entities/isAuth";
-import { Overlay, BackgroundContainer, ContentContainer } from "../bgSlider/BackgroundSlider.styles";
+import { BackgroundContainer, ContentContainer, Overlay, TransitionImage } from "../bgSlider/BackgroundSlider.styles";
+import Spinner from "@/shared/spinner/ui/Spinner";
 
 interface BackgroundSliderProps {
     images: string[];
-    duration?: number; // Duration in seconds
+    duration?: number;
 }
 
 const BackgroundSlider: React.FC<BackgroundSliderProps> = ({ images, duration = 5 }) => {
-    const isAuth = useSelector(isAuthSelectors.getIsAuth);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [loadedImages, setLoadedImages] = useState<boolean[]>(Array(images.length).fill(false));
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -23,21 +21,44 @@ const BackgroundSlider: React.FC<BackgroundSliderProps> = ({ images, duration = 
         return () => clearInterval(interval);
     }, [images, duration]);
 
+    useEffect(() => {
+        images.forEach((image, index) => {
+            const img = new window.Image();
+            img.src = image;
+            img.onload = () => {
+                setLoadedImages((prev) => {
+                    const newLoadedImages = [...prev];
+                    newLoadedImages[index] = true;
+                    return newLoadedImages;
+                });
+            };
+        });
+    }, [images]);
+
+    const allImagesLoaded = loadedImages.every(Boolean);
+    const currentImage = images[currentImageIndex];
+
     return (
-        <BackgroundContainer backgroundImage={images[currentImageIndex]}>
-            <Overlay />
-            <ContentContainer>
-                <Typography sx={{ textAlign: "center", fontSize: "2.5rem" }} variant="h2">
-                    Добро пожаловать в перенаправление!
-                </Typography>
-                <Link href="/start">
-                    <Button variant="contained" sx={{ display: "flex", m: "15px auto" }}>
-                        Перейти
-                    </Button>
-                </Link>
-            </ContentContainer>
+        <BackgroundContainer>
+            {!allImagesLoaded ? (
+                <Spinner />
+            ) : (
+                <>
+                    <TransitionImage backgroundImage={currentImage} />
+                    <Overlay />
+                    <ContentContainer>
+                        <Typography sx={{ textAlign: "center", fontSize: "2.5rem" }} variant="h2">
+                            Добро пожаловать в перенаправление!
+                        </Typography>
+                        <Link href="/start">
+                            <Button variant="contained" sx={{ display: "flex", m: "15px auto" }}>
+                                Перейти
+                            </Button>
+                        </Link>
+                    </ContentContainer>
+                </>
+            )}
         </BackgroundContainer>
     );
 };
-
-export default BackgroundSlider;
+export default BackgroundSlider
