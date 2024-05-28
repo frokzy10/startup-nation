@@ -1,66 +1,32 @@
 "use client"
-import React, {useEffect, useState} from 'react'
-import {Container, InputLabel, NativeSelect} from "@mui/material";
-import Typography from "@mui/material/Typography";
+import React, { useState } from 'react';
+import { Container, InputLabel, NativeSelect, FormControl, Box, Typography } from "@mui/material";
 import BackWidget from "@/widgets/backWidget/ui/BackWidget";
-import {StylesButton} from "@/app/start/StartPage.styles";
-import Box from "@mui/material/Box";
-import {$API, useAppDispatch} from "@/shared";
-import {FormControl} from "@mui/material";
-import {ICity, ICountry} from "@/RenderComponents/Types/types";
-import {useRouter} from "next/navigation";
-import {setIsAuth} from "@/entities/isAuth";
+import { StylesButton } from "@/app/start/StartPage.styles";
+import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/shared";
+import { ICity, ICountry } from "@/RenderComponents/Types/types";
+import { setIsAuth } from "@/entities/isAuth";
 import Spinner from "@/shared/spinner/ui/Spinner";
+import { useGetCountriesQuery } from "@/entities/getCountriesData/reducer/getCountriesData";
 
 const StartPage = () => {
-    const dispatch = useAppDispatch()
-    const [countries, setCountries] = useState<ICountry[]>([]);
+    const dispatch = useAppDispatch();
+    const { data: countries,isLoading } = useGetCountriesQuery();
     const [country, setCountry] = useState<string>("");
     const [city, setCity] = useState<string>("");
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const router = useRouter()
-    useEffect(() => {
-        const fetchCity = async () => {
-            try {
-                const res = await fetch(`${$API}/api/country/${city}`)
-                setIsLoading(true)
-                const data = await res.json()
-                return data;
-            } catch (e) {
-                console.log(e)
-            } finally {
-                setIsLoading(false)
-            }
-        }
-        fetchCity()
-    }, []);
-    console.log(city)
-    useEffect(() => {
-        const fetchCountries = async () => {
-            setIsLoading(true)
-            try {
-                const res = await fetch(`${$API}/api/country`);
-                if (!res.ok) {
-                    throw new Error("Failed to fetch data");
-                }
-                const data = await res.json();
-                setCountries(data);
-            } catch (err: any) {
-                console.log(err)
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchCountries();
-    }, []);
+    const router = useRouter();
+
     const handleNavigate = () => {
-        dispatch(setIsAuth(true))
-        return router.push(`/start/${city}`)
-    }
-    if (isLoading) return <Spinner/>;
+        dispatch(setIsAuth(true));
+        router.push(`/start/${city}`);
+    };
+
+    if (isLoading) return <Spinner />;
+
     return (
-        <Container sx={{marginTop: "20px",marginBottom:"200px"}}>
-            <BackWidget/>
+        <Container sx={{ marginTop: "20px", marginBottom: "200px" }}>
+            <BackWidget />
             <Typography variant="h5">Выберите страну проживания</Typography>
             <FormControl fullWidth>
                 <InputLabel variant="standard" htmlFor="uncontrolled-native">
@@ -69,14 +35,13 @@ const StartPage = () => {
                 <NativeSelect
                     onChange={(e) => setCountry(e.target.value)}
                     value={country}
-                    defaultValue={30}
                     inputProps={{
-                        name: 'age',
+                        name: 'country',
                         id: 'uncontrolled-native',
                     }}
                 >
                     <option value=""></option>
-                    {countries.map((c) => (
+                    {countries?.map((c: ICountry) => (
                         <option key={c._id.toString()} value={c.country}>
                             {c.country}
                         </option>
@@ -93,26 +58,25 @@ const StartPage = () => {
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                     inputProps={{
-                        name: 'country',
+                        name: 'city',
                         id: 'uncontrolled-native',
                     }}
                 >
                     <option value=""></option>
-                    {countries.map((country) => (
-                        country.cities.map((city: ICity) => (
-                            <option key={city._id.toString()} value={`${city._id}`}>
-                                {city.name}
-                            </option>
-                        ))
+                    {countries?.find((c: ICountry) => c.country === country)?.cities.map((city: ICity) => (
+                        <option key={city._id.toString()} value={city._id}>
+                            {city.name}
+                        </option>
                     ))}
                 </NativeSelect>
             </FormControl>
-            <Box sx={{width: "100%", display: "flex", justifyContent: "flex-end", marginTop: "15px"}}>
+            <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", marginTop: "15px" }}>
                 <StylesButton onClick={handleNavigate} variant="contained" disabled={!city || !country}>
                     Перейти
                 </StylesButton>
             </Box>
         </Container>
-    )
-}
+    );
+};
+
 export default StartPage;

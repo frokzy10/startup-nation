@@ -7,7 +7,6 @@ import {useParams} from "next/navigation";
 import CafeRender from "@/RenderComponents/CafeRender/CafeRender";
 
 const CafeWidget = ({cities}: { cities: ICity }) => {
-    const params = useParams();
     return (
         <Container className={cls.container}>
             <Grid container spacing={2} sx={{marginTop: "1rem", flexGrow: 1, padding: 0}}>
