@@ -1,10 +1,10 @@
 "use client"
 import {styled} from "@mui/material/styles";
 
-export const FooterCss = styled('div')(({theme}) => ({
-
+export const FooterCss = styled('footer')(({theme}) => ({
+    width:'100%',
+    position:"absolute",
     backgroundColor: '#fff',
-    // textAlign: 'center',
 }));
 
 export const FooterContainer = styled('div')(({ theme }) => ({
@@ -24,20 +24,3 @@ export const FooterContainer = styled('div')(({ theme }) => ({
         gridTemplateColumns: '1fr 1fr 1fr',
     },
 }));
-
-
-// footerContent: {
-//     maxWidth: 600,
-//         margin: '0 auto',
-// },
-// footerText: {
-//     margin: theme.spacing(1, 0),
-// },
-// link: {
-//     color: 'inherit',
-//         textDecoration: 'none',
-//         '&:hover': {
-//         textDecoration: 'underline',
-//     },
-// },
-

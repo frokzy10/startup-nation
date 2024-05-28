@@ -59,7 +59,7 @@ const StartPage = () => {
     }
     if (isLoading) return <Spinner/>;
     return (
-        <Container sx={{marginTop: "20px"}}>
+        <Container sx={{marginTop: "20px",marginBottom:"200px"}}>
             <BackWidget/>
             <Typography variant="h5">Выберите страну проживания</Typography>
             <FormControl fullWidth>

@@ -7,7 +7,7 @@ export const BackWidgetContainer = styled.div`
   height: 20px;
   cursor: pointer;
   margin-bottom: 10px;
-
+  width: 90px;
   &:hover {
     cursor: pointer;
     opacity: 0.8;

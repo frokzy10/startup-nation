@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 export interface IHotel {
     _id:string;
     name: string;
+    description: string;
     address: string;
     street: string;
     rating: number;
     social: [];
-    description: string;
     image: string;
     costAnHour: number;
     time: string
@@ -33,6 +33,7 @@ export interface IEntertainment {
 }
 
 export interface ICafe {
+    _id:string;
     name: string;
     rating: string;
     street: string;

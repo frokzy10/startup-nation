@@ -3,12 +3,11 @@ import {useEffect, useState} from "react";
 import {Container, Divider, Grid, TextField} from "@mui/material";
 import {useParams} from "next/navigation";
 import {ICity} from "@/RenderComponents/Types/types";
-import HotelsComponents from "@/RenderComponents/HotelComponents/HotelsComponents";
 import Spinner from "@/shared/spinner/ui/Spinner";
 import Typography from "@mui/material/Typography";
-import cls from "./Idpage.module.scss"
-import Link from "next/link";
 import {$API} from "@/shared";
+import CafeWidget from "@/widgets/CafeWidget/CafeWidget";
+import HotelWidget from "@/widgets/HotelWidget/HotelWidget";
 
 export default function IdPage() {
     const [cities, setCities] = useState<ICity | null>(null);
@@ -31,7 +30,7 @@ export default function IdPage() {
             }
         }
         fetchCity()
-    }, []);
+    }, [params.cityId]);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
@@ -56,20 +55,8 @@ export default function IdPage() {
                             <Typography sx={{fontSize: "25px", marginTop: "10px"}} variant="h3">
                                 Отели города {cities.name}
                             </Typography>
-                            <Container className={cls.container}>
-                                <Grid container spacing={2} sx={{marginTop: "1rem", flexGrow: 1, padding: 0}}>
-                                    {cities.hotels?.map((h, index) => (
-                                        <Grid item xs={12} sm={6} md={4} key={index}>
-                                            <Link href={`/start/${params.cityId}/${h._id}`}
-                                                  legacyBehavior>
-                                                <a>
-                                                    <HotelsComponents hotel={h}/>
-                                                </a>
-                                            </Link>
-                                        </Grid>
-                                    ))}
-                                </Grid>
-                            </Container>
+                            <HotelWidget cities={cities}/>
+                            <CafeWidget cities={cities}/>
                         </>
                     )}
                 </Container>

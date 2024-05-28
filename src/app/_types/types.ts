@@ -4,8 +4,8 @@ export interface IHotel extends Document {
     name: string;
     address: string;
     street: string;
-    rating: number;
-    social: [];
+    rating: string;
+    social: object;
     description: string;
     image: string;
     costAnHour: number;

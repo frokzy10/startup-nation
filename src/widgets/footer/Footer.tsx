@@ -15,8 +15,8 @@ import XIcon from '@mui/icons-material/X';
 const Footer: React.FC = () => {
 
     return (
-        <FooterCss sx={{width:'100%'}}>
-            <FooterContainer>
+        <FooterCss >
+            <FooterContainer sx>
                 <Container sx={{ margin: '0 auto', display:'flex', justifyContent:'center',flexDirection:'column'}}>
                     <Typography variant="h3" sx={{color: '#1976d2',}}>
                         TourGuide
