@@ -8,7 +8,7 @@ export interface IHotel extends Document {
     social: object;
     description: string;
     image: string;
-    costAnHour: number;
+    costAnHour: string;
     time: string
 }
 
@@ -32,14 +32,14 @@ export interface IEntertainment extends Document {
 }
 
 export interface ICafe extends Document {
-    name: string;
-    rating: string;
-    street: string;
-    description: string;
-    social: [];
-    meals: [];
-    image: string;
-    time: string;
+    cafeName: string;
+    cafeRating:string;
+    cafeStreet:string;
+    cafeDescription: string;
+    cafeSocial:[];
+    cafeMeals:[];
+    cafeImage:string;
+    cafeTime:string;
 }
 
 export interface IImage extends Document {
@@ -52,7 +52,6 @@ export interface ICity extends Document {
     population: number;
     description: string;
     hotels?: IHotel[];
-
     cafes?: ICafe[];
     attractions?: IAttraction[];
     entertainments?: IEntertainment[];

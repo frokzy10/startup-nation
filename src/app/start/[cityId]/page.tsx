@@ -18,7 +18,7 @@ export default function IdPage() {
     };
 
     if(isLoading) return <Spinner/>
-
+    console.log(data)
     return (
         <>
 
@@ -38,6 +38,9 @@ export default function IdPage() {
                                 Отели города {data.name}
                             </Typography>
                             <HotelWidget cities={data}/>
+                            <Typography sx={{fontSize: "25px", marginTop: "30px"}} variant="h3">
+                                Кафешки
+                            </Typography>
                             <CafeWidget cities={data}/>
                         </>
                     )}

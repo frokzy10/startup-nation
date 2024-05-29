@@ -7,23 +7,27 @@ const HotelSchema = new Schema<IHotel>({
     name: {type: String, required: true},
     address: String,
     street: String,
-    rating: Number,
+    rating: String,
     social: String,
     description: String,
     image: String,
     costAnHour: Number,
     time: String,
 });
-
+const MealsSchema = new Schema({
+    name:String,
+    description:String,
+    image:String,
+})
 const CafeSchema = new Schema<ICafe>({
-    name: {type: String, required: true},
-    rating: String,
-    street: String,
-    description: String,
-    social: String,
-    meals: String,
-    image: String,
-    time: String,
+    cafeName: {type: String, required: true},
+    cafeRating: String,
+    cafeStreet: String,
+    cafeDescription: String,
+    cafeSocial: String,
+    cafeMeals: [MealsSchema],
+    cafeImage: String,
+    cafeTime: String,
 });
 
 const AttractionSchema = new Schema<IAttraction>({

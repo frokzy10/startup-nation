@@ -1,7 +1,98 @@
 .container {
   padding: 0;
 
-  @media (min-width: 600px){
+  @media (min-width: 600px) {
     padding: 0;
+  }
+}
+
+.card {
+  width: 100%;
+  height: 250px;
+  padding: 2rem 1rem;
+  background: #fff;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  box-shadow: 0 7px 10px rgba(0, 0, 0, 0.5);
+  transition: 0.5s ease-in-out;
+
+  &:hover {
+    transform: translateY(3px);
+  }
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(30, 31, 31, 0.19), rgba(3, 3, 3, 0.24));
+    z-index: 2;
+    transition: all 0.5s;
+    opacity: 0;
+  }
+
+  &:hover:before {
+    opacity: 1;
+  }
+
+  .cardImg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+  }
+
+  .info {
+    position: relative;
+    z-index: 3;
+    color: #ffffff;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.5s;
+  }
+
+  &:hover {
+    .info {
+      opacity: 1;
+      transform: translateY(0px);
+
+      h5 {
+        margin: 0;
+      }
+
+      p {
+        letter-spacing: 1px;
+        font-size: 15px;
+        margin-top: 8px;
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    .info {
+      opacity: 1;
+      transform: translateY(0px);
+
+      h5 {
+        margin: 0;
+      }
+
+      p {
+        letter-spacing: 1px;
+        font-size: 15px;
+        margin-top: 8px;
+        margin-bottom: 20px;
+      }
+    }
+    &:before {
+      opacity: 1;
+    }
   }
 }

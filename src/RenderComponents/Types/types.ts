@@ -6,11 +6,12 @@ export interface IHotel {
     description: string;
     address: string;
     street: string;
-    rating: number;
+    rating: string;
     social: [];
     image: string;
-    costAnHour: number;
+    costAnHour: string;
     time: string
+    isHotel:boolean
 }
 
 export interface IAttraction {
@@ -34,16 +35,21 @@ export interface IEntertainment {
 
 export interface ICafe {
     _id:string;
-    name: string;
-    rating: string;
-    street: string;
-    description: string;
-    social: [];
-    meals: [];
-    image: string;
-    time: string;
+    cafeName: string;
+    cafeRating: string;
+    cafeStreet: string;
+    cafeDescription: string;
+    cafeSocial: [];
+    cafeMeals: [];
+    cafeImage: string;
+    cafeTime: string;
 }
+export interface IMeals {
+    name:string;
+    image:string;
+    description:string;
 
+}
 export interface IImage {
     image: any[]
     url: string;
