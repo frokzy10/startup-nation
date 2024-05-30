@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import BackWidget from "@/widgets/backWidget/ui/BackWidget";
 import {useGetProductIdQuery} from "@/entities/getProductData/reducer/productReducer";
 import {IMeals} from "@/RenderComponents/Types/types";
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack} from "@mui/material";
 
 const HotelPage = () => {
     const params = useParams();
@@ -17,6 +18,7 @@ const HotelPage = () => {
     const secondPort = location.split("/")[2];
     const [imageLoaded, setImageLoaded] = useState<boolean>(false);
     const {data, error, isLoading} = useGetProductIdQuery({secondPort: secondPort, productId: params.productId});
+    const [selectedMeal,setSelectedMeal] = useState<IMeals | null>(null);
 
     const handleImageLoad = () => {
         setImageLoaded(true);
@@ -24,6 +26,14 @@ const HotelPage = () => {
     const handleImageError = () => {
         setImageLoaded(true);
     };
+
+    const handleSelectMeal = (meal:IMeals) => {
+        setSelectedMeal(meal)
+    }
+    const handleCloseModal = () => {
+        setSelectedMeal(null)
+    }
+    console.log(selectedMeal)
     if (isLoading) return <Spinner/>
     console.log(data)
     return (
@@ -47,8 +57,13 @@ const HotelPage = () => {
                         <Typography className={cls.hotelDescription}
                                     variant="h6">{data?.description || data?.cafeDescription}</Typography>
                         <Typography className={cls.hotelCost} variant="h5">
-                            Цена в сутки {data?.costAnHour ? data?.costAnHour : "0"}
+                            {data.isCafes && ""}
                         </Typography>
+                        {data.isHotel && (
+                            <Typography sx={{textAlign: "right"}} variant="h5">
+                                {data?.costAnHour}$ в сутки
+                            </Typography>
+                        )}
                         {data?.isCafes && data?.cafeTime && (
                             <Typography sx={{textAlign: "right"}} variant="body1">
                                 График работы: {data?.cafeTime}
@@ -59,26 +74,42 @@ const HotelPage = () => {
                 <Box>
                     {data?.isCafes && (
                         <>
-                            <Typography variant="h3">
-                                Блюда из ресторана {data?.name}
+                            <Typography sx={{marginTop: "40px"}} variant="h3">
+                                Блюда из ресторана {data?.cafeName}
                             </Typography>
-                            {data?.cafeMeals.map((m: IMeals) => (
-                                <>
-                                    <Box>
-                                        <li>
+                            <Box className={cls.mealsContainer}>
+                                {data?.cafeMeals.map((m: IMeals) => (
+                                    <Box className={cls.mealsCard}>
+                                        <li className={cls.mealsTitle}>
                                             {m.name}
                                         </li>
-                                        <Box>
+                                        <Box className={cls.mealsDescription}>
                                             {m.description}
                                         </Box>
+                                        <Box className={cls.mealsInfoBtnCon}>
+                                            <Button onClick={() => handleSelectMeal(m)} variant="contained" className={cls.mealsInfoBtn}>
+                                                Инфо
+                                            </Button>
+                                        </Box>
                                     </Box>
-                                </>
-                            ))}
+                                ))}
+                            </Box>
                         </>
                     )}
-
-
                 </Box>
+                {selectedMeal && (
+                    <Dialog open={!!selectedMeal} onClose={handleCloseModal}>
+                        <DialogTitle>{selectedMeal.name}</DialogTitle>
+                        <DialogContent>
+                            <Typography>{selectedMeal.description}</Typography>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloseModal} color="primary">
+                                Закрыть
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                )}
             </Container>
         </>
     );

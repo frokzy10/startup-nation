@@ -15,16 +15,23 @@ const HotelSchema = new Schema<IHotel>({
     time: String,
 });
 const MealsSchema = new Schema({
-    name:String,
-    description:String,
-    image:String,
+    name: String,
+    description: String,
+    image: String,
+})
+const cafeSocialSchema = new Schema({
+    website: String
+})
+const cafeStreetSchema = new Schema({
+    name: String,
+    address: String,
 })
 const CafeSchema = new Schema<ICafe>({
     cafeName: {type: String, required: true},
     cafeRating: String,
-    cafeStreet: String,
+    cafeStreet: cafeStreetSchema,
     cafeDescription: String,
-    cafeSocial: String,
+    cafeSocial: cafeSocialSchema,
     cafeMeals: [MealsSchema],
     cafeImage: String,
     cafeTime: String,
