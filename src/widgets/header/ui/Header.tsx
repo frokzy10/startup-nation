@@ -52,15 +52,15 @@ export default function Header() {
     );
 
     return (
-        <Box sx={{flexGrow: 1}}>
-            <AppBar position={"sticky"}>
+        <Box>
+            <AppBar sx={{position: "sticky", top: 0, left: 0, right: 0}}>
                 <Toolbar>
                     <Link href="/">
                         <Typography
                             variant="h6"
                             noWrap
                             component="div"
-                            sx={{ color: "white"}}
+                            sx={{color: "white"}}
                         >
                             Navigation Web
                         </Typography>

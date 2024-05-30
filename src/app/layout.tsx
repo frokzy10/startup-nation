@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     icons:"https://static.vecteezy.com/system/resources/previews/008/213/768/non_2x/letter-n-thunderbolt-energy-logo-symbol-icon-design-vector.jpg"
 };
 
+
 export default function RootLayout({
                                        children,}: Readonly<{
     children: React.ReactNode;

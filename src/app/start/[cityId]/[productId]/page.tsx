@@ -10,7 +10,8 @@ import Typography from "@mui/material/Typography";
 import BackWidget from "@/widgets/backWidget/ui/BackWidget";
 import {useGetProductIdQuery} from "@/entities/getProductData/reducer/productReducer";
 import {IMeals} from "@/RenderComponents/Types/types";
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack} from "@mui/material";
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
+import Link from "next/link";
 
 const HotelPage = () => {
     const params = useParams();
@@ -18,7 +19,7 @@ const HotelPage = () => {
     const secondPort = location.split("/")[2];
     const [imageLoaded, setImageLoaded] = useState<boolean>(false);
     const {data, error, isLoading} = useGetProductIdQuery({secondPort: secondPort, productId: params.productId});
-    const [selectedMeal,setSelectedMeal] = useState<IMeals | null>(null);
+    const [selectedMeal, setSelectedMeal] = useState<IMeals | null>(null);
 
     const handleImageLoad = () => {
         setImageLoaded(true);
@@ -27,7 +28,7 @@ const HotelPage = () => {
         setImageLoaded(true);
     };
 
-    const handleSelectMeal = (meal:IMeals) => {
+    const handleSelectMeal = (meal: IMeals) => {
         setSelectedMeal(meal)
     }
     const handleCloseModal = () => {
@@ -60,9 +61,18 @@ const HotelPage = () => {
                             {data.isCafes && ""}
                         </Typography>
                         {data.isHotel && (
-                            <Typography sx={{textAlign: "right"}} variant="h5">
-                                {data?.costAnHour}$ в сутки
-                            </Typography>
+                            <>
+                                <Typography sx={{textAlign: "right"}} variant="h5">
+                                    {data?.costAnHour}$ в сутки
+                                </Typography>
+                                <Box sx={{display: "flex", justifyContent: "flex-end", marginTop: "15px"}}>
+                                    <Link href={`${params.productId}/payment?products=${data.name.replace(/\s+/g, '-')}&amount=${data.costAnHour}&img=${btoa(data.image)}`}>
+                                        <Button variant="contained">
+                                            Заказать
+                                        </Button>
+                                    </Link>
+                                </Box>
+                            </>
                         )}
                         {data?.isCafes && data?.cafeTime && (
                             <Typography sx={{textAlign: "right"}} variant="body1">
@@ -87,7 +97,8 @@ const HotelPage = () => {
                                             {m.description}
                                         </Box>
                                         <Box className={cls.mealsInfoBtnCon}>
-                                            <Button onClick={() => handleSelectMeal(m)} variant="contained" className={cls.mealsInfoBtn}>
+                                            <Button onClick={() => handleSelectMeal(m)} variant="contained"
+                                                    className={cls.mealsInfoBtn}>
                                                 Инфо
                                             </Button>
                                         </Box>
